@@ -4,6 +4,7 @@
   "description": "Rest API in NodeJS using Test Driven Development, Clean Architecture and Design Patterns.",
   "main": "src/main/index.js",
   "scripts": {
+    "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,7 +28,9 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0"
+    "eslint-plugin-promise": "^5.2.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^12.1.3"
   },
   "eslintConfig": {
     "env": {
@@ -42,5 +45,8 @@
       "ecmaVersion": 12
     },
     "rules": {}
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache"
   }
 }
