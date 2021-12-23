@@ -5,6 +5,10 @@ class HttpResponse {
     return { statusCode: 400, body: new MissingParamError(paramName) }
   }
 
+  static ok (body) {
+    return { statusCode: 200, body }
+  }
+
   static serverError () {
     return { statusCode: 500, body: new ServerError() }
   }
