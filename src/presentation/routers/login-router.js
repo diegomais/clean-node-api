@@ -5,9 +5,11 @@ class LoginRouter {
     if (!httpRequest || !httpRequest.body) {
       return HttpResponse.serverError()
     }
-    const { email, password } = httpRequest.body
-    if (!email || !password) {
-      return HttpResponse.badRequest()
+    if (!httpRequest.body.email) {
+      return HttpResponse.badRequest('email')
+    }
+    if (!httpRequest.body.password) {
+      return HttpResponse.badRequest('password')
     }
   }
 }
