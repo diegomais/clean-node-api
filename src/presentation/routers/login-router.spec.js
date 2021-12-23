@@ -1,4 +1,4 @@
-const { MissingParamError, ServerError } = require('../errors')
+const { MissingParamError, ServerError, UnauthorizedError } = require('../errors')
 const LoginRouter = require('./login-router')
 
 const makeAuthUseCase = () => {
@@ -55,5 +55,13 @@ describe(LoginRouter.name, () => {
     sut.route(httpRequest)
     expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
     expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
+  })
+
+  it('should return 401 if invalid credentials are provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = { body: { email: 'foo@bar.com', password: 'invalid' } }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
 })
