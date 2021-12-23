@@ -20,4 +20,11 @@ describe(LoginRouter.name, () => {
     const httpResponse = sut.route()
     expect(httpResponse.statusCode).toBe(500)
   })
+
+  it('should return 500 if httpRequest has no body', () => {
+    const sut = new LoginRouter()
+    const httpRequest = {}
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+  })
 })
