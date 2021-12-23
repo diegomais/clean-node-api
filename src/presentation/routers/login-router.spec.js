@@ -1,9 +1,20 @@
 const { MissingParamError, ServerError } = require('../errors')
 const LoginRouter = require('./login-router')
 
+const makeAuthUseCase = () => {
+  class AuthUseCaseSpy {
+    auth ({ email, password }) {
+      this.email = email
+      this.password = password
+    }
+  }
+  return new AuthUseCaseSpy()
+}
+
 const makeSut = () => {
-  const sut = new LoginRouter()
-  return { sut }
+  const authUseCaseSpy = makeAuthUseCase()
+  const sut = new LoginRouter(authUseCaseSpy)
+  return { authUseCaseSpy, sut }
 }
 
 describe(LoginRouter.name, () => {
@@ -36,5 +47,13 @@ describe(LoginRouter.name, () => {
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  it('should call AuthUseCase with correct params', () => {
+    const { authUseCaseSpy, sut } = makeSut()
+    const httpRequest = { body: { email: 'foo@bar.com', password: 'foo' } }
+    sut.route(httpRequest)
+    expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
+    expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
   })
 })
