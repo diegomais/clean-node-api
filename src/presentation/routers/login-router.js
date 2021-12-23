@@ -6,7 +6,7 @@ class LoginRouter {
   }
 
   route (httpRequest) {
-    if (!this.authUseCase || !httpRequest || !httpRequest.body) {
+    if (!this.authUseCase || !this.authUseCase.auth || !httpRequest || !httpRequest.body) {
       return HttpResponse.serverError()
     }
     const { email, password } = httpRequest.body
