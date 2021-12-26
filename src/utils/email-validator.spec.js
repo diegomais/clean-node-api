@@ -1,3 +1,4 @@
+const validator = require('validator')
 const EmailValidator = require('./email-validator')
 
 jest.mock('validator', () => ({
@@ -18,5 +19,12 @@ describe(EmailValidator.name, () => {
     const sut = makeSut()
     const isValid = sut.isValid('foo@bar.com')
     expect(isValid).toBe(true)
+  })
+
+  it('should return false if validator returns false', () => {
+    validator.isEmailValid = false
+    const sut = makeSut()
+    const isValid = sut.isValid('invalid-email')
+    expect(isValid).toBe(false)
   })
 })
