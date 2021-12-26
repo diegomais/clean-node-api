@@ -135,4 +135,11 @@ describe(LoginRouter.name, () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
+
+  it('should call EmailValidator with correct email', async () => {
+    const { emailValidatorSpy, sut } = makeSut()
+    const httpRequest = { body: { email: 'foo@bar.com', password: 'foo' } }
+    await sut.route(httpRequest)
+    expect(emailValidatorSpy.email).toBe(httpRequest.body.email)
+  })
 })
