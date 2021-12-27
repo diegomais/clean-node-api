@@ -12,4 +12,10 @@ describe(AuthUseCase.name, () => {
     const promise = sut.auth()
     expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
+
+  it('should throw MissingParamError if no password is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.auth('foo@bar.com')
+    expect(promise).rejects.toThrow(new MissingParamError('password'))
+  })
 })
