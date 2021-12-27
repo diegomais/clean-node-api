@@ -38,4 +38,10 @@ describe(AuthUseCase.name, () => {
     await sut.auth(email, 'password')
     expect(loadUserByEmailRepositorySpy.email).toBe(email)
   })
+
+  it('should throw if no LoadUserByEmailRepository is provided', async () => {
+    const sut = new AuthUseCase({})
+    const promise = sut.auth('foo@bar.com', 'password')
+    expect(promise).rejects.toThrow()
+  })
 })
