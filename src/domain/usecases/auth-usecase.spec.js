@@ -44,4 +44,10 @@ describe(AuthUseCase.name, () => {
     const promise = sut.auth('foo@bar.com', 'password')
     expect(promise).rejects.toThrow()
   })
+
+  it('should throw if LoadUserByEmailRepository has no load method', async () => {
+    const sut = new AuthUseCase({ loadUserByEmailRepository: {} })
+    const promise = sut.auth('foo@bar.com', 'password')
+    expect(promise).rejects.toThrow()
+  })
 })
