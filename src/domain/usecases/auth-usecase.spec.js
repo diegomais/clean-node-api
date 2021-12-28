@@ -57,4 +57,10 @@ describe(AuthUseCase.name, () => {
     const accessToken = await sut.auth('non-existent-user@mail.com', 'password')
     expect(accessToken).toBeNull()
   })
+
+  it('should return null if an invalid password is provided', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.auth('foo@bar.com', 'invalid-password')
+    expect(accessToken).toBeNull()
+  })
 })
