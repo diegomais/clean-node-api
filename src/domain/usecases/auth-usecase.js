@@ -6,7 +6,7 @@ class AuthUseCase {
     loadUserByEmailRepository,
     tokenGenerator,
     updateAccessTokenRepository
-  }) {
+  } = {}) {
     this.encrypter = encrypter
     this.loadUserByEmailRepository = loadUserByEmailRepository
     this.tokenGenerator = tokenGenerator

@@ -88,18 +88,6 @@ describe(AuthUseCase.name, () => {
     expect(loadUserByEmailRepositorySpy.email).toBe(email)
   })
 
-  it('should throw if no LoadUserByEmailRepository is provided', async () => {
-    const sut = new AuthUseCase({})
-    const promise = sut.auth('foo@bar.com', 'password')
-    expect(promise).rejects.toThrow()
-  })
-
-  it('should throw if LoadUserByEmailRepository has no load method', async () => {
-    const sut = new AuthUseCase({ loadUserByEmailRepository: {} })
-    const promise = sut.auth('foo@bar.com', 'password')
-    expect(promise).rejects.toThrow()
-  })
-
   it('should return null if non-existent user is provided', async () => {
     const { loadUserByEmailRepositorySpy, sut } = makeSut()
     loadUserByEmailRepositorySpy.user = null
@@ -145,5 +133,50 @@ describe(AuthUseCase.name, () => {
     await sut.auth('foo@bar.com', 'password')
     expect(updateAccessTokenRepositorySpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
     expect(updateAccessTokenRepositorySpy.accessToken).toBe(tokenGeneratorSpy.accessToken)
+  })
+
+  it('should throw if invalid dependencies are provided', async () => {
+    const invalid = {}
+    const encrypter = makeEncrypter()
+    const loadUserByEmailRepository = makeLoadUserByEmailRepository()
+    const tokenGenerator = makeTokenGenerator()
+    const suts = [].concat(
+      new AuthUseCase(),
+      new AuthUseCase({}),
+      new AuthUseCase({
+        encrypter: invalid
+      }),
+      new AuthUseCase({
+        encrypter
+      }),
+      new AuthUseCase({
+        encrypter,
+        loadUserByEmailRepository: invalid
+      }),
+      new AuthUseCase({
+        encrypter,
+        loadUserByEmailRepository
+      }),
+      new AuthUseCase({
+        encrypter,
+        loadUserByEmailRepository,
+        tokenGenerator: invalid
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        tokenGenerator,
+        encrypter
+      }),
+      new AuthUseCase({
+        encrypter,
+        loadUserByEmailRepository,
+        tokenGenerator,
+        updateAccessTokenRepository: invalid
+      })
+    )
+    for (const sut of suts) {
+      const promise = sut.auth('foo@bar.com', 'password')
+      expect(promise).rejects.toThrow()
+    }
   })
 })
