@@ -50,4 +50,11 @@ describe(AuthUseCase.name, () => {
     const promise = sut.auth('foo@bar.com', 'password')
     expect(promise).rejects.toThrow()
   })
+
+  it('should return null if non-existent user is provided', async () => {
+    const { loadUserByEmailRepositorySpy, sut } = makeSut()
+    loadUserByEmailRepositorySpy.user = null
+    const accessToken = await sut.auth('non-existent-user@mail.com', 'password')
+    expect(accessToken).toBeNull()
+  })
 })

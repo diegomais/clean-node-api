@@ -12,7 +12,10 @@ class AuthUseCase {
     if (!password) {
       throw new MissingParamError('password')
     }
-    await this.loadUserByEmailRepository.load(email)
+    const user = await this.loadUserByEmailRepository.load(email)
+    if (!user) {
+      return null
+    }
   }
 }
 
