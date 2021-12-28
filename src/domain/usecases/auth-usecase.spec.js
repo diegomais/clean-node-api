@@ -90,7 +90,8 @@ describe(AuthUseCase.name, () => {
   })
 
   it('should return null if an invalid password is provided', async () => {
-    const { sut } = makeSut()
+    const { encrypterSpy, sut } = makeSut()
+    encrypterSpy.isValid = false
     const accessToken = await sut.auth('foo@bar.com', 'invalid-password')
     expect(accessToken).toBeNull()
   })
@@ -107,5 +108,12 @@ describe(AuthUseCase.name, () => {
     const { loadUserByEmailRepositorySpy, sut, tokenGeneratorSpy } = makeSut()
     await sut.auth('foo@bar.com', 'password')
     expect(tokenGeneratorSpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
+  })
+
+  it('should return an accessToken if correct credentials are provided', async () => {
+    const { sut, tokenGeneratorSpy } = makeSut()
+    const accessToken = await sut.auth('foo@bar.com', 'password')
+    expect(accessToken).toBe(tokenGeneratorSpy.accessToken)
+    expect(accessToken).toEqual(expect.any(String))
   })
 })

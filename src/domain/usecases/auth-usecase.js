@@ -20,7 +20,8 @@ class AuthUseCase {
     }
     const isValid = await this.encrypter.compare(password, user.password)
     if (isValid) {
-      await this.tokenGenerator.generate(user.id)
+      const accessToken = await this.tokenGenerator.generate(user.id)
+      return accessToken
     }
     return null
   }
