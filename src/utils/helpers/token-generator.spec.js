@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { MissingParamError } = require('../errors')
 const TokenGenerator = require('./token-generator')
 
 jest.mock('jsonwebtoken', () => ({
@@ -11,7 +12,7 @@ jest.mock('jsonwebtoken', () => ({
 }))
 
 const makeSut = () => {
-  return new TokenGenerator()
+  return new TokenGenerator('some-secret')
 }
 
 describe(TokenGenerator.name, () => {
@@ -34,5 +35,11 @@ describe(TokenGenerator.name, () => {
     await sut.generate(payload)
     expect(jwt.payload).toBe(payload)
     expect(jwt.privateKey).toBe(sut.privateKey)
+  })
+
+  it('should throw if no privateKey is provided', async () => {
+    const sut = new TokenGenerator()
+    const promise = sut.generate('some-payload')
+    expect(promise).rejects.toThrow(new MissingParamError('privateKey'))
   })
 })
