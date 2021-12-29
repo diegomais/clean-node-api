@@ -27,4 +27,12 @@ describe(TokenGenerator.name, () => {
     const token = await sut.generate('some-payload')
     expect(token).toBe(jwt.token)
   })
+
+  it('should call JWT with correct values', async () => {
+    const sut = makeSut()
+    const payload = 'some-payload'
+    await sut.generate(payload)
+    expect(jwt.payload).toBe(payload)
+    expect(jwt.privateKey).toBe(sut.privateKey)
+  })
 })
