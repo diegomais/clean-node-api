@@ -42,4 +42,10 @@ describe(TokenGenerator.name, () => {
     const promise = sut.generate('some-payload')
     expect(promise).rejects.toThrow(new MissingParamError('privateKey'))
   })
+
+  it('should throw if no payload is provided', async () => {
+    const sut = makeSut()
+    const promise = sut.generate()
+    expect(promise).rejects.toThrow(new MissingParamError('payload'))
+  })
 })

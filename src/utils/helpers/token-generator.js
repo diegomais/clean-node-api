@@ -10,6 +10,9 @@ class TokenGenerator {
     if (!this.privateKey) {
       throw new MissingParamError('privateKey')
     }
+    if (!payload) {
+      throw new MissingParamError('payload')
+    }
     return jwt.sign(payload, this.privateKey)
   }
 }
