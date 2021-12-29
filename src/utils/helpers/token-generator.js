@@ -1,6 +1,12 @@
+const jwt = require('jsonwebtoken')
+
 class TokenGenerator {
-  async generate () {
-    return null
+  constructor (privateKey) {
+    this.privateKey = privateKey
+  }
+
+  async generate (payload) {
+    return jwt.sign(payload, this.privateKey)
   }
 }
 
