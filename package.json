@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/diegomais/clean-node-api#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "validator": "^13.7.0"
   },
   "devDependencies": {
