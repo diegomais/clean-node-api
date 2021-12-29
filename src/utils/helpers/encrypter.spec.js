@@ -28,4 +28,13 @@ describe(Encrypter.name, () => {
     const isValid = await sut.compare('some-value', 'hashed-value')
     expect(isValid).toBe(false)
   })
+
+  it('should call bcrypt with correct values', async () => {
+    const sut = makeSut()
+    const value = 'some-value'
+    const hashedValue = 'hashed-value'
+    await sut.compare(value, hashedValue)
+    expect(bcrypt.value).toBe(value)
+    expect(bcrypt.hash).toBe(hashedValue)
+  })
 })
