@@ -1,5 +1,6 @@
-const UpdateAccessTokenRepository = require('./update-access-token-repository')
+const MissingParamError = require('../../utils/errors/missing-param-error')
 const MongoHelper = require('../helpers/mongo-helper')
+const UpdateAccessTokenRepository = require('./update-access-token-repository')
 
 let fakeUserId, userModel
 
@@ -33,5 +34,11 @@ describe(UpdateAccessTokenRepository.name, () => {
     await sut.update(fakeUserId, accessToken)
     const user = await userModel.findOne({ _id: fakeUserId })
     expect(user.accessToken).toBe(accessToken)
+  })
+
+  it('should throw if no params are provided', async () => {
+    const sut = makeSut()
+    expect(sut.update()).rejects.toThrow(new MissingParamError('userId'))
+    expect(sut.update(fakeUserId)).rejects.toThrow(new MissingParamError('accessToken'))
   })
 })
