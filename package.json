@@ -5,6 +5,7 @@
   "main": "src/main/index.js",
   "scripts": {
     "prepare": "husky install",
+    "start": "node src/main/index.js",
     "test": "jest",
     "test:ci": "npm test -- --ci --coverage"
   },
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/diegomais/clean-node-api#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.7.3",
     "validator": "^13.7.0"
