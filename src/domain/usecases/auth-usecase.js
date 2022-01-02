@@ -13,7 +13,7 @@ class AuthUseCase {
     this.updateAccessTokenRepository = updateAccessTokenRepository
   }
 
-  async auth (email, password) {
+  async auth ({ email, password } = {}) {
     if (!email) {
       throw new MissingParamError('email')
     }
