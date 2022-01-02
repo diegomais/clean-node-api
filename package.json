@@ -5,8 +5,11 @@
   "main": "src/main/index.js",
   "scripts": {
     "prepare": "husky install",
+    "start": "node src/main/index.js",
     "test": "jest",
-    "test:ci": "npm test -- --ci --coverage"
+    "test:ci": "npm test -- --ci --coverage",
+    "test:integration": "npm test -- --watch --config jest-integration-config.js",
+    "test:unit": "npm test -- --watch --config jest-unit-config.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,7 @@
   "homepage": "https://github.com/diegomais/clean-node-api#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.7.3",
     "validator": "^13.7.0"
@@ -39,7 +43,8 @@
     "eslint-plugin-promise": "5.2.0",
     "husky": "7.0.4",
     "jest": "27.4.5",
-    "lint-staged": "12.1.4"
+    "lint-staged": "12.1.4",
+    "supertest": "^6.1.6"
   },
   "eslintConfig": {
     "env": {
@@ -55,12 +60,6 @@
       "ecmaVersion": 12
     },
     "rules": {}
-  },
-  "jest": {
-    "collectCoverage": true,
-    "coverageDirectory": "coverage",
-    "coverageProvider": "v8",
-    "preset": "@shelf/jest-mongodb"
   },
   "lint-staged": {
     "*.js": "eslint --cache"

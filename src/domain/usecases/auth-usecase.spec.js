@@ -113,48 +113,48 @@ describe(AuthUseCase.name, () => {
 
   it('should throw MissingParamError if no password is provided', async () => {
     const { sut } = makeSut()
-    const promise = sut.auth('foo@bar.com')
+    const promise = sut.auth({ email: 'foo@bar.com' })
     expect(promise).rejects.toThrow(new MissingParamError('password'))
   })
 
   it('should call LoadUserByEmailRepository with correct email', async () => {
     const { sut, loadUserByEmailRepositorySpy } = makeSut()
     const email = 'foo@bar.com'
-    await sut.auth(email, 'password')
+    await sut.auth({ email, password: 'password' })
     expect(loadUserByEmailRepositorySpy.email).toBe(email)
   })
 
   it('should return null if non-existent user is provided', async () => {
     const { loadUserByEmailRepositorySpy, sut } = makeSut()
     loadUserByEmailRepositorySpy.user = null
-    const accessToken = await sut.auth('non-existent-user@mail.com', 'password')
+    const accessToken = await sut.auth({ email: 'non-existent-user@mail.com', password: 'password' })
     expect(accessToken).toBeNull()
   })
 
   it('should return null if an invalid password is provided', async () => {
     const { encrypterSpy, sut } = makeSut()
     encrypterSpy.isValid = false
-    const accessToken = await sut.auth('foo@bar.com', 'invalid-password')
+    const accessToken = await sut.auth({ email: 'foo@bar.com', password: 'invalid-password' })
     expect(accessToken).toBeNull()
   })
 
   it('should call Encrypter with correct values', async () => {
     const { encrypterSpy, loadUserByEmailRepositorySpy, sut } = makeSut()
     const password = 'password'
-    await sut.auth('foo@bar.com', password)
+    await sut.auth({ email: 'foo@bar.com', password })
     expect(encrypterSpy.value).toBe(password)
     expect(encrypterSpy.hash).toBe(loadUserByEmailRepositorySpy.user.password)
   })
 
   it('should call TokenGenerator with correct values', async () => {
     const { loadUserByEmailRepositorySpy, sut, tokenGeneratorSpy } = makeSut()
-    await sut.auth('foo@bar.com', 'password')
-    expect(tokenGeneratorSpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
+    await sut.auth({ email: 'foo@bar.com', password: 'password' })
+    expect(tokenGeneratorSpy.userId).toEqual({ id: loadUserByEmailRepositorySpy.user._id })
   })
 
   it('should return an accessToken if correct credentials are provided', async () => {
     const { sut, tokenGeneratorSpy } = makeSut()
-    const accessToken = await sut.auth('foo@bar.com', 'password')
+    const accessToken = await sut.auth({ email: 'foo@bar.com', password: 'password' })
     expect(accessToken).toBe(tokenGeneratorSpy.accessToken)
     expect(accessToken).toEqual(expect.any(String))
   })
@@ -166,8 +166,8 @@ describe(AuthUseCase.name, () => {
       tokenGeneratorSpy,
       updateAccessTokenRepositorySpy
     } = makeSut()
-    await sut.auth('foo@bar.com', 'password')
-    expect(updateAccessTokenRepositorySpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
+    await sut.auth({ email: 'foo@bar.com', password: 'password' })
+    expect(updateAccessTokenRepositorySpy.userId).toBe(loadUserByEmailRepositorySpy.user._id)
     expect(updateAccessTokenRepositorySpy.accessToken).toBe(tokenGeneratorSpy.accessToken)
   })
 
