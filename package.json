@@ -44,7 +44,7 @@
     "husky": "7.0.4",
     "jest": "27.4.5",
     "lint-staged": "12.1.4",
-    "supertest": "^6.1.6"
+    "supertest": "6.1.6"
   },
   "eslintConfig": {
     "env": {
