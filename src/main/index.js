@@ -1,6 +1,12 @@
-const app = require('./config/app')
-const { port } = require('./config/vars')
+const MongoHelper = require('../infra/helpers/mongo-helper')
+const { mongoUrl, port } = require('./config/vars')
 
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`)
-})
+MongoHelper.connect(mongoUrl)
+  .then(() => {
+    const app = require('./config/app')
+
+    app.listen(port, () => {
+      console.log(`App listening at http://localhost:${port}`)
+    })
+  })
+  .catch(console.error)
