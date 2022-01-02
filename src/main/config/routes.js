@@ -12,7 +12,9 @@ const setupRoutes = app => {
 
     files.forEach(file => {
       const basename = path.basename(file, '.js')
-      require(`../routes/${basename}`)(router)
+      if (!/test$/.test(basename)) {
+        require(`../routes/${basename}`)(router)
+      }
     })
   })
 }
