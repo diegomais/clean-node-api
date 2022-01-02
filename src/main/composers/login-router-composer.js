@@ -18,9 +18,9 @@ const authUseCase = new AuthUseCase({
   tokenGenerator,
   updateAccessTokenRepository
 })
-const loginRouter = new LoginRouter(
+const loginRouter = new LoginRouter({
   authUseCase,
   emailValidator
-)
+})
 
 module.exports = loginRouter
